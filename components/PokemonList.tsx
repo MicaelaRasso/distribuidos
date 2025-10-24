@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PokemonItem } from './PokemonItem';
+import { PokemonCard } from './PokemonCard';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface Pokemon {
   id: number;
@@ -23,14 +25,14 @@ export const PokemonList = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [clickCounts, setClickCounts] = useState<Record<number, number>>({});
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=20');
-        const data = await response.json();
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=20');
+        const data = response.data;
         
         const pokemonDetails = await Promise.all(
           data.results.map(async (pokemon: { url: string }) => {
@@ -51,15 +53,13 @@ export const PokemonList = () => {
   }, []);
 
   const handlePokemonClick = (pokemonId: number) => {
-    setClickCounts(prev => ({
-      ...prev,
-      [pokemonId]: (prev[pokemonId] || 0) + 1
-    }));
+    router.push(`/pokemon/${pokemonId}`);
   };
+
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-800 to-violet-200 flex items-center justify-center">
+      <div className="py-8 px-4">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
           <p className="mt-4 text-lg text-gray-700">Cargando Pokémon...</p>
@@ -70,8 +70,8 @@ export const PokemonList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-800 to-violet-200 flex items-center justify-center">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+      <div className="py-8 px-4">
+       <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
           {error}
         </div>
       </div>
@@ -79,19 +79,18 @@ export const PokemonList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-800 to-violet-200 py-8 px-4">
+    <div className="py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-pink-100 mb-2">
+        <h1 className="py-6 text-4xl font-bold text-center text-pink-100 mb-2">
           Pokédex
         </h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {pokemons.map((pokemon) => (
-            <PokemonItem
+            <PokemonCard
               key={pokemon.id}
               pokemon={pokemon}
               onClick={() => handlePokemonClick(pokemon.id)}
-              clickCount={clickCounts[pokemon.id] || 0}
             />
           ))}
         </div>

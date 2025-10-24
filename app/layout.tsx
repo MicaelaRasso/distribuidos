@@ -17,17 +17,52 @@ export const metadata: Metadata = {
   description: "Generated for the TP4 of Sistemas Distribuidos",
 };
 
+import Link from 'next/link';
+import './globals.css';
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="es">
+      <body>
+        <div className="flex flex-col min-h-screen">
+          {/* Navbar */}
+          <nav className="bg-pink-200 text-white shadow-lg">
+            <div className="max-w-4xl mx-auto px-4">
+              <div className="flex items-center justify-between h-12">
+                <Link href="/" className="flex items-center space-x-2">
+                  <span className="text-2xl font-bold">Pokédex</span>
+                </Link>
+                <Link
+                  href="/"
+                  className="text-sm px-4 py-2 rounded-lg bg-pink-400 hover:bg-pink-500 transition"
+                >
+                  Pokemones
+                </Link>
+              </div>
+            </div>
+          </nav>
+
+          {/* Contenido principal */}
+          <main className="flex-grow m-0 p-0 bg-gradient-to-br from-pink-800 to-violet-200">
+            {children}
+          </main>
+          
+          {/* Footer */}
+          <footer className="bg-violet-200 text-white py-6">
+            <div className="max-w-7xl mx-auto px-4 text-center">
+              <p className="text-sm">
+                © 2025 Pokédex App - Desarrollado para Sistemas Distribuidos
+              </p>
+              <p className="text-xs text-gray-600 mt-2">
+                Datos proporcionados por PokeAPI
+              </p>
+            </div>
+          </footer>
+        </div>
       </body>
     </html>
   );
