@@ -1,82 +1,24 @@
-'use client';
+'use server';
 
-import { useState, useEffect } from 'react';
-import { PokemonCard } from './PokemonCard';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { PokemonCard } from './PokemonCard';
+
 
 interface Pokemon {
-  id: number;
   name: string;
-  height: number;
-  weight: number;
-  sprites: {
-    front_default: string;
-  };
-  types: {
-    slot: number;
-    type: {
-      name: string;
-    };
-  }[];
+  url: string;
 }
 
-export const PokemonList = () => {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+const fetchPokemons = async (): Promise<Pokemon[]> => {
+  const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=20');
+  console.log('Fetched Pokémons:', response.data.results);
+  return response.data.results;
+};
 
-  useEffect(() => {
-    const fetchPokemons = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=20');
-        const data = response.data;
-        
-        const pokemonDetails = await Promise.all(
-          data.results.map(async (pokemon: { url: string }) => {
-            const detailResponse = await fetch(pokemon.url);
-            return detailResponse.json();
-          })
-        );
-        
-        setPokemons(pokemonDetails);
-        setLoading(false);
-      } catch (err) {
-        setError('Error al cargar los Pokémon. Por favor, intenta nuevamente.');
-        setLoading(false);
-      }
-    };
+export const PokemonList = async () => {
 
-    fetchPokemons();
-  }, []);
-
-  const handlePokemonClick = (pokemonId: number) => {
-    router.push(`/pokemon/${pokemonId}`);
-  };
-
-
-  if (loading) {
-    return (
-      <div className="py-8 px-4">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
-          <p className="mt-4 text-lg text-gray-700">Cargando Pokémon...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="py-8 px-4">
-       <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
-          {error}
-        </div>
-      </div>
-    );
-  }
+  const data = await fetchPokemons();
 
   return (
     <div className="py-8 px-4">
@@ -84,17 +26,18 @@ export const PokemonList = () => {
         <h1 className="py-6 text-4xl font-bold text-center text-pink-100 mb-2">
           Pokédex
         </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {pokemons.map((pokemon) => (
-            <PokemonCard
-              key={pokemon.id}
-              pokemon={pokemon}
-              onClick={() => handlePokemonClick(pokemon.id)}
-            />
-          ))}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {data.map(
+            (pokemon, index) => (
+              <Link href={`/pokemon/${pokemon.name}`} key={index}>
+                <PokemonCard pokemonURL={pokemon.url} />
+              </Link>
+            )
+          )}
         </div>
       </div>
     </div>
+
   );
 };

@@ -1,8 +1,3 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
 import { typeColors } from '@/constants/PokemonTypes';
 import axios from 'axios';
 
@@ -36,55 +31,29 @@ interface PokemonDetail {
   }[];
 }
 
-export default function PokemonDetailPage() {
-  const params = useParams();
-  const id = params.id as string;
-  const [pokemon, setPokemon] = useState<PokemonDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export const fetchPokemonDetails = async (url: string): Promise<PokemonDetail> => {
+  const response = await axios.get(url);
+  const data = await response.data;
+  return data;
+};
 
-  useEffect(() => {
-    const fetchPokemon = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        const data = response.data;
-        setPokemon(data);
-        setLoading(false);
-      } catch (err) {
-        setError('Error al cargar el Pokémon');
-        setLoading(false);
-      }
-    };
+interface PokemonProps {
+  name: string;
+}
 
-    if (id) {
-      fetchPokemon();
-    }
-  }, [id]);
+export const handleImageError = () => {
+  return (
+    <img
+      src='/images/default-pokemon.png'
+    ></img>
+  );
+};
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-red-600"></div>
-          <p className="mt-4 text-lg text-gray-700">Cargando Pokémon...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !pokemon) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-pink-100 border border-pink-400 text-pink-700 px-6 py-4 rounded-lg">
-          {error || 'Pokémon no encontrado'}
-        </div>
-      </div>
-    );
-  }
+export const PokemonDetails = async ({ name }: PokemonProps) => {
+  const pokemon: PokemonDetail = await fetchPokemonDetails(`https://pokeapi.co/api/v2/pokemon/${name}`);
 
   return (
-        <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-8 px-4">
       <div className="max-w-3xl mx-auto">
 
         <div className="bg-white rounded-xl shadow-lg p-8">
@@ -148,7 +117,7 @@ export default function PokemonDetailPage() {
                   </p>
                 </div>
               </div>
-              
+
               {/* Tipos */}
               <div className="mb-6 mt-4">
                 <h2 className="text-sm font-semibold text-gray-600 mb-2">
@@ -158,10 +127,9 @@ export default function PokemonDetailPage() {
                   {pokemon.types.map((type) => (
                     <span
                       key={type.slot}
-                      className={`px-4 py-1 text-sm font-medium rounded-lg ${
-                        typeColors[type.type.name] ||
+                      className={`px-4 py-1 text-sm font-medium rounded-lg ${typeColors[type.type.name] ||
                         'bg-gray-300 text-gray-800'
-                      }`}
+                        }`}
                     >
                       {type.type.name}
                     </span>
@@ -186,7 +154,7 @@ export default function PokemonDetailPage() {
                 </div>
               </div>
 
-              
+
             </div>
           </div>
 
@@ -219,13 +187,8 @@ export default function PokemonDetailPage() {
             </div>
           </div>
         </div>
-      <Link
-          href="/"
-          className="py-4 inline-flex items-center text-pink-300 hover:text-pink-700 font-medium mb-6">
-          ← Volver a la lista
-        </Link>
-      
       </div>
     </div>
   );
-}
+
+} 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Suspense from "next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
 
 import Link from 'next/link';
 import './globals.css';
+import loadConfig from "next/dist/server/config";
 
 export default function RootLayout({
   children,
@@ -50,7 +52,7 @@ export default function RootLayout({
           <main className="flex-grow m-0 p-0 bg-gradient-to-br from-pink-800 to-violet-200">
             {children}
           </main>
-          
+
           {/* Footer */}
           <footer className="bg-violet-200 text-white py-6">
             <div className="max-w-7xl mx-auto px-4 text-center">
@@ -63,7 +65,7 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
-      </body>
-    </html>
+      </body >
+    </html >
   );
 }
