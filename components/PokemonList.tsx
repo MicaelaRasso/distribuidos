@@ -6,28 +6,60 @@ import { PokemonCard } from './PokemonCard';
 import { useQuery } from "@tanstack/react-query";
 import PokemonesLoading from '@/app/loading';
 import PokemonesNotFound from '@/app/not-found';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Pokemon {
   name: string;
   url: string;
 }
 
-const fetchPokemons = async (): Promise<Pokemon[]> => {
-  const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=20');
-  return response.data.results;
+interface FetchResponse {
+  results: Pokemon[];
+  next: string | null;
+  count: number;
+}
+
+const PAGE_SIZE = 20;
+
+const fetchPokemons = async (offset = 0): Promise<FetchResponse> => {
+  const response = await axios.get(
+    `https://pokeapi.co/api/v2/pokemon?limit=${PAGE_SIZE}&offset=${offset}`
+  );
+  return response.data;
 };
 
 export const PokemonList = () => {
-  const { data, isLoading, error } = useQuery<Pokemon[]>({
-    queryKey: ["pokemons"], // clave del cache
-    queryFn: fetchPokemons, // función que trae los datos
+  const [page, setPage] = useState(0); // 0-based page index
+  const [items, setItems] = useState<Pokemon[]>([]);
+  const [loadedPages, setLoadedPages] = useState<number[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  const offset = page * PAGE_SIZE;
+
+  const {
+    data: pageData,
+    isLoading,
+    error,
+    isFetching,
+  } = useQuery<FetchResponse>({
+    queryKey: ["pokemons", page],
+    queryFn: () => fetchPokemons(offset),
   });
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!pageData) return;
+
+    if (!loadedPages.includes(page)) {
+      setItems((prev) => [...prev, ...pageData.results]);
+      setLoadedPages((prev) => [...prev, page]);
+    }
+    setHasMore(Boolean(pageData.next));
+  }, [pageData, page, loadedPages]);
+
+  if (isLoading && items.length === 0) {
     return <PokemonesLoading />;
   }
-  if (error) {
+  if (error && items.length === 0) {
     return <PokemonesNotFound />;
   }
 
@@ -39,12 +71,24 @@ export const PokemonList = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {data?.map(
-            (pokemon, index) => (
-              <Link href={`/pokemon/${pokemon.name}`} key={index}>
-                <PokemonCard pokemonURL={pokemon.url} />
-              </Link>
-            )
+          {items.map((pokemon, index) => (
+            <Link href={`/pokemon/${pokemon.name}`} key={pokemon.name + index}>
+              <PokemonCard pokemonURL={pokemon.url} />
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-6 text-center">
+          {hasMore ? (
+            <button
+              className="px-4 py-2 bg-pink-100 text-white rounded hover:opacity-90 disabled:opacity-50"
+              onClick={() => setPage((p) => p + 1)}
+              disabled={isFetching}
+            >
+              {isFetching ? 'Cargando...' : 'Cargar más'}
+            </button>
+          ) : (
+            <p className="text-sm text-gray-500">No hay más pokemones.</p>
           )}
         </div>
       </div>
