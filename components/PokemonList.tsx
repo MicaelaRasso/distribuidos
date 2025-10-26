@@ -1,9 +1,12 @@
-'use server';
+'use client';
 
 import axios from 'axios';
 import Link from 'next/link';
 import { PokemonCard } from './PokemonCard';
-
+import { useQuery } from "@tanstack/react-query";
+import PokemonesLoading from '@/app/loading';
+import PokemonesNotFound from '@/app/not-found';
+import { useState } from 'react';
 
 interface Pokemon {
   name: string;
@@ -12,13 +15,21 @@ interface Pokemon {
 
 const fetchPokemons = async (): Promise<Pokemon[]> => {
   const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=20');
-  console.log('Fetched Pokémons:', response.data.results);
   return response.data.results;
 };
 
-export const PokemonList = async () => {
+export const PokemonList = () => {
+  const { data, isLoading, error } = useQuery<Pokemon[]>({
+    queryKey: ["pokemons"], // clave del cache
+    queryFn: fetchPokemons, // función que trae los datos
+  });
 
-  const data = await fetchPokemons();
+  if (isLoading) {
+    return <PokemonesLoading />;
+  }
+  if (error) {
+    return <PokemonesNotFound />;
+  }
 
   return (
     <div className="py-8 px-4">
@@ -28,7 +39,7 @@ export const PokemonList = async () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {data.map(
+          {data?.map(
             (pokemon, index) => (
               <Link href={`/pokemon/${pokemon.name}`} key={index}>
                 <PokemonCard pokemonURL={pokemon.url} />
@@ -38,6 +49,5 @@ export const PokemonList = async () => {
         </div>
       </div>
     </div>
-
   );
 };

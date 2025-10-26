@@ -1,7 +1,8 @@
+import Providers from "@/app/providers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Suspense from "next"
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,9 +19,6 @@ export const metadata: Metadata = {
   description: "Generated for the TP4 of Sistemas Distribuidos",
 };
 
-import Link from 'next/link';
-import './globals.css';
-import loadConfig from "next/dist/server/config";
 
 export default function RootLayout({
   children,
@@ -49,9 +47,8 @@ export default function RootLayout({
           </nav>
 
           {/* Contenido principal */}
-          <main className="flex-grow m-0 p-0 bg-gradient-to-br from-pink-800 to-violet-200">
-            {children}
-          </main>
+          <Providers>{children}</Providers>
+
 
           {/* Footer */}
           <footer className="bg-violet-200 text-white py-6">

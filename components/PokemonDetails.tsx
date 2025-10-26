@@ -1,56 +1,13 @@
+'use server'
 import { typeColors } from '@/constants/PokemonTypes';
-import axios from 'axios';
-
-interface PokemonDetail {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-  sprites: {
-    front_default: string;
-    back_default: string;
-    front_shiny: string;
-    back_shiny: string;
-  };
-  types: {
-    slot: number;
-    type: {
-      name: string;
-    };
-  }[];
-  stats: {
-    base_stat: number;
-    stat: {
-      name: string;
-    };
-  }[];
-  abilities: {
-    ability: {
-      name: string;
-    };
-  }[];
-}
-
-export const fetchPokemonDetails = async (url: string): Promise<PokemonDetail> => {
-  const response = await axios.get(url);
-  const data = await response.data;
-  return data;
-};
+import { Pokemon, fetchPokemonDetails } from '@/services/pokemon';
 
 interface PokemonProps {
   name: string;
 }
 
-export const handleImageError = () => {
-  return (
-    <img
-      src='/images/default-pokemon.png'
-    ></img>
-  );
-};
-
 export const PokemonDetails = async ({ name }: PokemonProps) => {
-  const pokemon: PokemonDetail = await fetchPokemonDetails(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  const pokemon: Pokemon = await fetchPokemonDetails(`https://pokeapi.co/api/v2/pokemon/${name}`);
 
   return (
     <div className="min-h-screen py-8 px-4">
