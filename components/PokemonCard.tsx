@@ -5,7 +5,6 @@ import { typeColors } from '../constants/PokemonTypes';
 import { Pokemon, fetchPokemonDetails } from '@/services/pokemon';
 import PokemonesNotFound from '@/app/not-found';
 import PokemonesLoading from '@/app/loading';
-import { FC, useState } from 'react';
 
 
 interface PokemonItemProps {
