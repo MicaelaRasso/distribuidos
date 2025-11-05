@@ -1,6 +1,6 @@
 'use server'
 import { typeColors } from '@/constants/PokemonTypes';
-import { Pokemon, fetchPokemonDetails } from '@/services/pokemon';
+import { Pokemon, fetchPokemonDetails } from '@/app/services/pokemon.service';
 
 interface PokemonProps {
   name: string;

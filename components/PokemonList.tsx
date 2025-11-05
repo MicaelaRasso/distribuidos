@@ -72,9 +72,9 @@ export const PokemonList = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {items.map((pokemon, index) => (
-            <Link href={`/pokemon/${pokemon.name}`} key={pokemon.name + index}>
-              <PokemonCard pokemonURL={pokemon.url} />
-            </Link>
+
+            <PokemonCard pokemonURL={pokemon.url} key={pokemon.name + index} />
+
           ))}
         </div>
 
