@@ -30,6 +30,15 @@ export interface Pokemon {
   }[];
 }
 
+export interface FavoritePokemon {
+  id: string;
+  name: string;
+  nickname: string;
+  description: string;
+  image: string;
+}
+
+
 export const fetchPokemonDetails = async (url: string): Promise<Pokemon> => {
   const response = await axios.get(url);
   const data = await response.data;

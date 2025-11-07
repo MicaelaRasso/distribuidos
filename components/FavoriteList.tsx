@@ -1,18 +1,22 @@
 'use client';
 
-import { PokemonCard } from './PokemonCard';
 import { useQuery } from "@tanstack/react-query";
 import PokemonesLoading from '@/app/loading';
 import PokemonesNotFound from '@/app/not-found';
 import { useState } from 'react';
 import { fetchFavorites } from '@/app/services/favorites.service';
+import FavoritePokemonCard from "@/components/FavoritePokemonCard";
 
-interface Pokemon {
+
+interface Favorite {
+  id: string;
   name: string;
-  url: string;
+  nickname: string;
+  description: string;
+  image: string;
 }
-const PAGE_SIZE = 20;
 
+const PAGE_SIZE = 20;
 
 export const FavoriteList = () => {
   const [page, setPage] = useState(1);
@@ -22,7 +26,7 @@ export const FavoriteList = () => {
     isLoading,
     error,
     isFetching,
-  } = useQuery<Pokemon[] | undefined>({
+  } = useQuery<Favorite[] | undefined>({
     queryKey: ["allFavorites"], // Clave estática para un solo fetch
     queryFn: () => fetchFavorites(),
     staleTime: 5 * 60 * 1000,
@@ -63,9 +67,16 @@ export const FavoriteList = () => {
           Favoritos
         </h1>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {itemsToDisplay.map((pokemon, index) => (
-            <PokemonCard pokemonURL={URL + pokemon.name} key={pokemon.name + index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {itemsToDisplay.map((fav) => (
+            <FavoritePokemonCard
+              key={fav.id}
+              id={fav.id}
+              name={fav.name}
+              nickname={fav.nickname}
+              description={fav.description}
+              image={fav.image}
+            />
           ))}
         </div>
 

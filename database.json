@@ -1,38 +1,16 @@
 [
   {
-    "id": "6",
-    "name": "charizard"
+    "id": "5",
+    "name": "charmeleon",
+    "nickname": "charmi",
+    "description": "dragoncito",
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png"
   },
   {
-    "id": "4",
-    "name": "charmander"
-  },
-  {
-    "id": "16",
-    "name": "pidgey"
-  },
-  {
-    "id": "31",
-    "name": "nidoqueen"
-  },
-  {
-    "id": "23",
-    "name": "ekans"
-  },
-  {
-    "id": "39",
-    "name": "jigglypuff"
-  },
-  {
-    "id": "36",
-    "name": "clefable"
-  },
-  {
-    "id": "58",
-    "name": "growlithe"
-  },
-  {
-    "id": "53",
-    "name": "persian"
+    "id": "18",
+    "name": "pidgeot",
+    "nickname": "pid",
+    "description": "pajarito",
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png"
   }
 ]

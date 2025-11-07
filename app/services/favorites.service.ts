@@ -1,8 +1,11 @@
 export type FavoritePayload = {
   id: string | number;
   name: string;
-  [key: string]: any;
+  nickname: string;
+  description: string;
+  image: string;
 };
+
 
 const BASE = '/api/favorites';
 
