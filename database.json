@@ -8,7 +8,31 @@
     "name": "charmander"
   },
   {
-    "id": "18",
-    "name": "pidgeot"
+    "id": "16",
+    "name": "pidgey"
+  },
+  {
+    "id": "31",
+    "name": "nidoqueen"
+  },
+  {
+    "id": "23",
+    "name": "ekans"
+  },
+  {
+    "id": "39",
+    "name": "jigglypuff"
+  },
+  {
+    "id": "36",
+    "name": "clefable"
+  },
+  {
+    "id": "58",
+    "name": "growlithe"
+  },
+  {
+    "id": "53",
+    "name": "persian"
   }
 ]

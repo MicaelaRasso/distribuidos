@@ -1,7 +1,6 @@
 'use client';
 
 import axios from 'axios';
-import Link from 'next/link';
 import { PokemonCard } from './PokemonCard';
 import { useQuery } from "@tanstack/react-query";
 import PokemonesLoading from '@/app/loading';

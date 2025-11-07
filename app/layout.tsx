@@ -33,15 +33,22 @@ export default function RootLayout({
           <nav className="bg-pink-200 text-white shadow-lg">
             <div className="max-w-4xl mx-auto px-4">
               <div className="flex items-center justify-between h-12">
-                <Link href="/" className="flex items-center space-x-2">
-                  <span className="text-2xl font-bold">Pokédex</span>
-                </Link>
-                <Link
-                  href="/"
-                  className="text-sm px-4 py-2 rounded-lg bg-pink-400 hover:bg-pink-500 transition"
-                >
-                  Pokemones
-                </Link>
+                <span className="text-2xl font-bold">Pokédex</span>
+
+                <div className="flex space-x-4">
+                  <Link
+                    href="/"
+                    className="text-sm px-4 py-2 rounded-lg bg-pink-400 hover:bg-pink-500 transition"
+                  >
+                    Pokemones
+                  </Link>
+                  <Link
+                    href="/favorites"
+                    className="text-sm px-4 py-2 rounded-lg bg-pink-400 hover:bg-pink-500 transition"
+                  >
+                    Favoritos
+                  </Link>
+                </div>
               </div>
             </div>
           </nav>

@@ -24,7 +24,6 @@ export const PokemonCard = ({ pokemonURL }: PokemonItemProps) => {
   const addMutation = useAddFavorite();
   const removeMutation = useRemoveFavorite();
 
-  // Variables derivadas que no son hooks
   const fallbackUrl = '/images/pokeball.png';
   const loading = isLoading || favLoading || addMutation.isPending || removeMutation.isPending;
 
@@ -34,7 +33,6 @@ export const PokemonCard = ({ pokemonURL }: PokemonItemProps) => {
     return favorites.some((f: any) => String(f.id) === String(data.id));
   }, [favorites, data]);
 
-  // Eento de toggle favorito
   const onToggleFavorite = async () => {
     if (!data) return;
     try {
@@ -52,7 +50,6 @@ export const PokemonCard = ({ pokemonURL }: PokemonItemProps) => {
     }
   };
 
-  // Render según estado (fuera de los hooks)
   if (isLoading) return <PokemonesLoading />;
   if (error) return <PokemonesNotFound />;
   if (!data) return null;
