@@ -6,6 +6,7 @@ import PokemonesNotFound from '@/app/not-found';
 import { useState } from 'react';
 import { fetchFavorites } from '@/app/services/favorites.service';
 import FavoritePokemonCard from "@/components/FavoritePokemonCard";
+import { useFavoritesQuery } from '@/app/hooks/useFavorites';
 
 
 interface Favorite {
@@ -26,11 +27,7 @@ export const FavoriteList = () => {
     isLoading,
     error,
     isFetching,
-  } = useQuery<Favorite[] | undefined>({
-    queryKey: ["allFavorites"], // Clave estática para un solo fetch
-    queryFn: () => fetchFavorites(),
-    staleTime: 5 * 60 * 1000,
-  });
+  } = useFavoritesQuery();
 
 
   if (isLoading) {
@@ -68,7 +65,7 @@ export const FavoriteList = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {itemsToDisplay.map((fav) => (
+          {itemsToDisplay.map((fav: Favorite) => (
             <FavoritePokemonCard
               key={fav.id}
               id={fav.id}

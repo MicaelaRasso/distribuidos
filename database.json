@@ -12,5 +12,26 @@
     "nickname": "pid",
     "description": "pajarito",
     "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png"
+  },
+  {
+    "id": "39",
+    "name": "jigglypuff",
+    "nickname": "jpff",
+    "description": "es rosita",
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png"
+  },
+  {
+    "id": "8",
+    "name": "wartortle",
+    "nickname": "wartie",
+    "description": "es una tortuga azul",
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png"
+  },
+  {
+    "id": "4",
+    "name": "charmander",
+    "nickname": "chimi",
+    "description": "es rojo",
+    "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
   }
 ]

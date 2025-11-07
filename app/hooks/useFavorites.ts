@@ -13,9 +13,13 @@ export function useFavoritesQuery() {
   return useQuery({
     queryKey: ['favorites'],
     queryFn: fetchFavorites,
-    staleTime: 120000, // 2 minutos
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    staleTime: 0, 
   });
 }
+
 
 // 🔹 Hook para agregar un favorito
 export function useAddFavorite() {
